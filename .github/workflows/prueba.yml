@@ -2,7 +2,8 @@ name: Generar números aleatorios
 
 on:
   schedule:
-    - cron: "*/1 * * * *" # Ejecutar cada 1 minutos para prueba inicial
+    - cron: "*/1 * * * *"  # Ejecutar cada 5 minutos para prueba inicial
+  workflow_dispatch:  # Permite la ejecución manual desde la interfaz de GitHub
 
 jobs:
   generate-numbers:
@@ -15,7 +16,7 @@ jobs:
     - name: Configurar Python
       uses: actions/setup-python@v4
       with:
-        python-version: "3.1"
+        python-version: "3.x"
 
     - name: Generar número y guardar
       run: |
