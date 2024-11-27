@@ -2,7 +2,7 @@ name: Generar números aleatorios
 
 on:
   schedule:
-    - cron: "*/1 * * * *"  # Ejecutar cada 5 minutos para prueba inicial
+    - cron: "*/1 * * * *"  # Ejecutar cada 1 minutos para prueba inicial
   workflow_dispatch:  # Permite la ejecución manual desde la interfaz de GitHub
 
 jobs:
@@ -22,10 +22,13 @@ jobs:
       run: |
         python prueba.py
 
-    - name: Commit de los cambios
+    - name: Configurar Git para Commit
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+    
+    - name: Commit y Push cambios
+      run: |
         git add numeros_aleatorios.txt
         git commit -m "Actualizar números aleatorios"
-        git push
+        git push https://github-actions:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
