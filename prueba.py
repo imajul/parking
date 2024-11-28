@@ -1,12 +1,8 @@
 import random
-from datetime import datetime
-import pytz  # Biblioteca para manejo de zonas horarias
+from datetime import datetime, timedelta
 
-# Configurar la zona horaria GMT-3
-zona_horaria = pytz.timezone("America/Sao_Paulo")  # Ejemplo para GMT-3 (puede ser Buenos Aires)
-
-# Obtener la hora actual en GMT-3
-hora_actual = datetime.now(zona_horaria).strftime("%H:%M:%S")
+# Obtener la hora actual en UTC y restar 3 horas para GMT-3
+hora_actual = (datetime.utcnow() - timedelta(hours=3)).strftime("%H:%M:%S")
 
 # Generar un número aleatorio entre 1 y 100
 numero = random.randint(1, 100)
@@ -19,4 +15,5 @@ with open("numeros_aleatorios.txt", "a") as archivo:
     archivo.write(linea)
 
 print(f"Se añadió al archivo: {linea.strip()}")
+
 
