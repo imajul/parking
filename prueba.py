@@ -1,13 +1,18 @@
 import random
+from datetime import datetime
 
-# Nombre del archivo donde se guardarán los números
-archivo = "numeros_aleatorios.txt"
-
-# Genera un número entero aleatorio entre 1 y 100
+# Generar un número aleatorio entre 1 y 100
 numero = random.randint(1, 100)
 
-# Abre el archivo en modo de adición y guarda el número
-with open(archivo, "a") as f:
-    f.write(f"{numero}\n")
+# Obtener la hora actual (HH:MM:SS)
+hora_actual = datetime.now().strftime("%H:%M:%S")
 
-print(f"Número generado y guardado: {numero}")
+# Crear la línea que se añadirá al archivo
+linea = f"{hora_actual} - Número aleatorio: {numero}\n"
+
+# Abrir el archivo en modo de añadir y escribir la línea
+with open("numeros_aleatorios.txt", "a") as archivo:
+    archivo.write(linea)
+
+print(f"Se añadió al archivo: {linea.strip()}")
+
