@@ -5,10 +5,10 @@ from datetime import datetime, timedelta
 hora_actual = datetime.utcnow() - timedelta(hours=3)
 
 # Verificar si estamos en un minuto válido (10, 20, 30, 40, 50, 0)
-minutos_validos = {0, 10, 20, 30, 40, 50}
-if hora_actual.minute not in minutos_validos:
-    print(f"No es un minuto válido para ejecutar la tarea. Hora actual: {hora_actual.strftime('%H:%M:%S')}")
-    exit(0)
+# minutos_validos = {0, 10, 20, 30, 40, 50}
+# if hora_actual.minute not in minutos_validos:
+#    print(f"No es un minuto válido para ejecutar la tarea. Hora actual: {hora_actual.strftime('%H:%M:%S')}")
+#    exit(0)
 
 # Generar un número aleatorio entre 1 y 100
 numero = random.randint(1, 100)
