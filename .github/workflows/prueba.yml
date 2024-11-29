@@ -2,8 +2,8 @@ name: Generar números aleatorios
 
 on:
   schedule:
-    - cron: "*/2 * * * *"  # Ejecutar cada 2 minutos para prueba inicial
-  workflow_dispatch:  # Permite la ejecución manual desde la interfaz de GitHub
+    - cron: "10,20,30,40,50,0 * * * *"  # Minuto 10, 20, 30, 40, 50 y 0 de cada hora
+  workflow_dispatch:  # Permitir ejecución manual
 
 permissions:
   contents: write  # Permite que GitHub Actions escriba en los contenidos del repositorio
