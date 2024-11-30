@@ -239,3 +239,4 @@
 06:25:58 - Número aleatorio: 61
 06:34:37 - Número aleatorio: 23
 06:41:45 - Número aleatorio: 71
+06:51:54 - Número aleatorio: 70
