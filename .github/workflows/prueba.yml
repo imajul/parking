@@ -2,7 +2,7 @@ name: Generar números aleatorios
 
 on:
   schedule:
-    - cron: "10,20,30,40,50,0 * * * *"  # Minuto 10, 20, 30, 40, 50 y 0 de cada hora
+    - cron: "0,15,30,45 * * * *"  # ejecucion cada 15 minutos
   workflow_dispatch:  # Permitir ejecución manual
 
 permissions:
