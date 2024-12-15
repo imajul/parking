@@ -1240,3 +1240,4 @@
 13:52:16 - Número aleatorio: 20
 14:12:52 - Número aleatorio: 3
 14:29:41 - Número aleatorio: 24
+14:40:24 - Número aleatorio: 45
