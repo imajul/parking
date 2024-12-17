@@ -1370,3 +1370,4 @@
 16:25:54 - Número aleatorio: 17
 16:37:01 - Número aleatorio: 16
 16:50:01 - Número aleatorio: 69
+17:17:27 - Número aleatorio: 48
