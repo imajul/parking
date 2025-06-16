@@ -1,7 +1,7 @@
 {
   "name": "parkalot-reserva",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.cjs",
   "type": "module",
   "dependencies": {
     "puppeteer-core": "^21.3.8"
