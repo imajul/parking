@@ -22,7 +22,7 @@ jobs:
       - name: Instalar dependencias
         run: npm install
       - name: Ejecutar script de reserva
-        run: node index.js
+        run: node index.cjs
         env:
           MY_EMAIL: ${{ secrets.PARKALOT_EMAIL }}
           MY_PASSWORD: ${{ secrets.PARKALOT_PASSWORD }}
