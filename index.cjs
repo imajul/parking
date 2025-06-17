@@ -22,18 +22,6 @@ async function automateParkingReservation() {
     });
     const page = await browser.newPage();
 
-    page.on('console', msg => {
-        for (let i = 0; i < msg.args().length; ++i) {
-            msg.args()[i].jsonValue().then(value => {
-                if (typeof value === 'string' && value.startsWith('[Evaluate DEBUG]')) {
-                    console.log(`[BROWSER CONSOLE]: ${value}`);
-                } else if (typeof value === 'string' && value.includes('Error:')) {
-                    console.error(`[BROWSER CONSOLE ERROR]: ${value}`);
-                }
-            }).catch(e => console.error(`Error al procesar log de consola: ${e.message}`));
-        }
-    });
-
     try {
         console.log('Navegando a la página de login...');
         await page.goto('https://app.parkalot.io/#/login', { waitUntil: 'domcontentloaded' });

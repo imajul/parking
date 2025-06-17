@@ -2,7 +2,7 @@
   "name": "parkalot-reserva",
   "version": "1.0.0",
   "main": "index.cjs",
-  "type": "module",
+  "type": "commonjs",
   "dependencies": {
   "puppeteer": "^22.8.2"
   }
