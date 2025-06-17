@@ -2,7 +2,7 @@ const puppeteer = require('puppeteer');
 
 const MY_EMAIL = process.env.MY_EMAIL;
 const MY_PASSWORD = process.env.MY_PASSWORD;
-const PARKING_SPOT_NUMBER = '237';
+const PARKING_SPOT_NUMBER = '238';
 
 async function automateParkingReservation() {
     console.log('Iniciando automatización de reserva de cochera...');
