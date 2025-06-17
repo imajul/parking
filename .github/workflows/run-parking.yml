@@ -2,7 +2,7 @@ name: Reserva Automática Parkalot
 
 on:
   schedule:
-    - cron: '8 23 * * 1-5' # 23 UTC = 20 ART, lunes a viernes
+    - cron: '14 23 * * 1-5' # 23 UTC = 20 ART, lunes a viernes
   workflow_dispatch:
 
 jobs:
