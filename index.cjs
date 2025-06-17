@@ -9,7 +9,6 @@ async function automateParkingReservation() {
 
     const browser = await puppeteer.launch({
         headless: true,
-        // executablePath: '/nix/store/khk7xpgsm5insk81azy9d560yq4npf77-chromium-131.0.6778.204/bin/chromium',
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
