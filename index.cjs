@@ -1,14 +1,14 @@
 const puppeteer = require('puppeteer');
 
-const MY_EMAIL = process.env.MY_EMAIL;
-const MY_PASSWORD = process.env.MY_PASSWORD;
-const PARKING_SPOT_NUMBER = '237';
+const MY_EMAIL = 'ignacio.majul@genneia.com.ar';
+const MY_PASSWORD = 'Genneia.12345$';
+const PARKING_SPOT_NUMBER = '3117';
 
 async function automateParkingReservation() {
     console.log('Iniciando automatización de reserva de cochera...');
 
     const browser = await puppeteer.launch({
-        headless: true,
+        headless: false,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -23,37 +23,49 @@ async function automateParkingReservation() {
     const page = await browser.newPage();
 
     try {
-        console.log('Navegando a la página de login...');
-        await page.goto('https://app.parkalot.io/#/login', { waitUntil: 'domcontentloaded' });
+        await page.goto('https://app.parkalot.io/#/login', { waitUntil: 'networkidle2' });
+        await new Promise(r => setTimeout(r, 2000));
+        await page.type('input[type="email"]', MY_EMAIL, { delay: 100 });
+        await page.type('input[type="password"]', MY_PASSWORD, { delay: 100 });
+        await page.waitForSelector('button[type="button"].md-btn', { visible: true, timeout: 20000 });
+        await page.screenshot({ path: '1_llego_al_login.png' });
 
-        // Espera mínima para los campos de login
-        await page.waitForSelector('input[type="email"]', { visible: true, timeout: 15000 });
-        await page.waitForSelector('input[type="password"]', { visible: true, timeout: 15000 });
+        await page.click('button[type="button"].md-btn');
+        await new Promise(r => setTimeout(r, 3000));
+        await page.screenshot({ path: '2_tipeo_credenciales.png' });
 
-        console.log('Ingresando credenciales...');
-        await page.type('input[type="email"]', MY_EMAIL, { delay: 10 });
-        await page.type('input[type="password"]', MY_PASSWORD, { delay: 10 });
+        // Espera a que haya al menos un botón Details visible
+        await page.waitForSelector('button.md-btn.md-flat', { visible: true, timeout: 35000 });
 
-        // Login inmediato al estar el botón disponible
-        const loginButtonSelector = 'button[type="button"].md-btn';
-        await page.waitForSelector(loginButtonSelector, { visible: true, timeout: 15000 });
-        await page.click(loginButtonSelector);
+        // Hace scroll para cargar todos los bloques posibles
+        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+        await new Promise(r => setTimeout(r, 1000));
+        await page.screenshot({ path: '4_dashboard.png' });
 
-        // Esperar sólo hasta que la URL cambie al dashboard
-        await page.waitForFunction(() => window.location.hash.startsWith('#/client'), { timeout: 15000 });
+        // Buscar y clickear el último Details
+        const detailButtons = await page.$$('button.md-btn.md-flat');
+        console.log('Cantidad de botones Details encontrados:', detailButtons.length);
 
-        // Esperar el botón "DETAILS" lo antes posible
-        const detailsBtn = 'button[type="button"].md-btn.md-flat';
-        await page.waitForSelector(detailsBtn, { visible: true, timeout: 15000 });
-        await page.click(detailsBtn);
+        if (detailButtons.length === 0) {
+            await page.screenshot({ path: '99_error_screenshot.png' });
+            throw new Error('No se encontraron botones DETAILS');
+        }
 
-        // Esperar a que cargue el contenedor de cocheras
+        await page.screenshot({ path: '5_details_buttons_found.png' });
+
+        const lastDetailButton = detailButtons[detailButtons.length - 1];
+        await lastDetailButton.evaluate(el => el.scrollIntoView({ behavior: "smooth", block: "center" }));
+        await new Promise(r => setTimeout(r, 1000));
+        await lastDetailButton.click();
+        await new Promise(r => setTimeout(r, 2000));
+        await page.screenshot({ path: '6_details_clicked.png' });
+
+        // Esperar el listado de cocheras
         const scrollableContainerSelector = 'div[data-test-id="virtuoso-scroller"]';
-        await page.waitForSelector(scrollableContainerSelector, { visible: true, timeout: 15000 });
+        await page.waitForSelector(scrollableContainerSelector, { visible: true, timeout: 25000 });
 
-        // Scroll dinámico rápido
         let cocheraEncontrada = false;
-        const maxScrolls = 30;
+        const maxScrolls = 80;
         for (let i = 0; i < maxScrolls; i++) {
             const spotHandle = await page.evaluateHandle((selector, spotNumber) => {
                 const container = document.querySelector(selector);
@@ -64,52 +76,49 @@ async function automateParkingReservation() {
                         return h6.closest('button');
                     }
                 }
-                container.scrollTop += container.clientHeight * 0.8;
+                container.scrollTop += container.clientHeight * 0.7;
                 return null;
             }, scrollableContainerSelector, PARKING_SPOT_NUMBER);
 
             const element = await spotHandle?.asElement();
             if (element) {
+                await new Promise(r => setTimeout(r, 1800));
                 await element.scrollIntoViewIfNeeded();
-                await element.click({ delay: 10 });
+                await new Promise(r => setTimeout(r, 800));
+                await element.click({ delay: 100 });
                 cocheraEncontrada = true;
                 console.log(`Clic en cochera ${PARKING_SPOT_NUMBER} realizado.`);
                 break;
             }
-
-            await new Promise(r => setTimeout(r, 100)); // Pausa mínima para renderizar
+            await new Promise(r => setTimeout(r, 1200));
         }
 
         if (!cocheraEncontrada) {
-            console.error(`No se pudo encontrar la cochera ${PARKING_SPOT_NUMBER} tras múltiples scrolls.`);
-            await page.screenshot({ path: 'error_no_spot_found.png' });
-            throw new Error('Cochera no encontrada.');
+            await page.screenshot({ path: '99_no_spot_found.png' });
+            throw new Error(`No se pudo encontrar y expandir la cochera ${PARKING_SPOT_NUMBER} tras múltiples intentos.`);
         }
 
-        // Clic en "Reserve" apenas aparezca
-        console.log('Buscando y clickeando botón "Reserve" lo antes posible...');
+        await page.screenshot({ path: '7_antes_de_reserve.png' });
+        await new Promise(r => setTimeout(r, 1200));
+
+        const buttons = await page.$$('button');
         let reserveButton = null;
-        for (let intentos = 0; intentos < 20; intentos++) {
-            const buttons = await page.$$('button');
-            for (const button of buttons) {
-                const buttonText = await page.evaluate(el => el.innerText, button);
-                if (buttonText && buttonText.trim().toLowerCase().includes('reserve')) {
-                    reserveButton = button;
-                    break;
-                }
+        for (const button of buttons) {
+            const buttonText = await page.evaluate(el => el.innerText, button);
+            if (buttonText && buttonText.trim().toLowerCase().includes('reserve')) {
+                reserveButton = button;
+                break;
             }
-            if (reserveButton) break;
-            await new Promise(r => setTimeout(r, 100)); // Pausa mínima para dar tiempo al DOM
         }
 
         if (reserveButton) {
             await reserveButton.click();
+            await new Promise(r => setTimeout(r, 1200));
+            await page.screenshot({ path: '8_reserve_clicked.png' });
             console.log('Clic en "Reserve" realizado.');
-            await new Promise(r => setTimeout(r, 1000));
-            await page.screenshot({ path: '7_reserve_clicked.png' });
         } else {
-            console.warn('No se encontró el botón "Reserve". Puede estar reservado o el botón cambió.');
-            await page.screenshot({ path: '7_no_reserve_button.png' });
+            await page.screenshot({ path: '8_no_reserve_button.png' });
+            throw new Error('No se encontró el botón "Reserve".');
         }
 
     } catch (error) {

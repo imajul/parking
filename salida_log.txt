@@ -1,0 +1,14 @@
+Iniciando automatización de reserva de cochera...
+Ocurrió un error durante la automatización: Error: Execution context was destroyed, most likely because of a navigation.
+    at rewriteError (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\ExecutionContext.js:452:15)
+    at async #evaluate (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\ExecutionContext.js:384:60)
+    at async ExecutionContext.evaluateHandle (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\ExecutionContext.js:325:16)
+    at async IsolatedWorld.evaluateHandle (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\cdp\IsolatedWorld.js:88:16)
+    at async CdpJSHandle.evaluateHandle (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\api\JSHandle.js:150:20)
+    at async CdpElementHandle.evaluateHandle (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\api\ElementHandle.js:344:20)
+    at async CSSQueryHandler.queryAll (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\common\QueryHandler.js:109:59)
+    at async AsyncIterableUtil.collect (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\util\AsyncIterableUtil.js:20:26)
+    at async #$$impl (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\api\ElementHandle.js:441:20)
+    at async #$$ (C:\Users\imaju\Documents\Parking\parking\node_modules\puppeteer-core\lib\cjs\puppeteer\api\ElementHandle.js:209:28)
+Cerrando navegador...
+Automatización finalizada.
